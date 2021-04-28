@@ -1,0 +1,7 @@
+FROM nginx:stable-alpine
+
+WORKDIR /etc/nginx/conf.d
+
+COPY default.conf .
+
+WORKDIR /var/www/html

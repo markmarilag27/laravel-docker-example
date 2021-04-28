@@ -1,0 +1,76 @@
+version: '3.9'
+services:
+
+    # Webserver
+    nginx:
+        build:
+            context: ./dockerfiles/nginx
+            dockerfile: Dockerfile
+        image: markmarilag27/nginx
+        container_name: nginx
+        restart: unless-stopped
+        ports:
+            - "80:80"
+        volumes:
+            - ./src:/var/www/html
+
+    # PHP Interpreter
+    php:
+        build:
+            context: ./dockerfiles/php
+            dockerfile: Dockerfile
+        image: markmarilag27/php8
+        container_name: php
+        restart: unless-stopped
+        volumes:
+            - ./src:/var/www/html
+
+    # Database
+    mysql:
+        image: mysql:latest
+        container_name: mysql
+        restart: unless-stopped
+        command: --default-authentication-plugin=mysql_native_password
+        env_file:
+            - .env
+        volumes:
+            - mysql-data:/var/lib/mysql/
+
+    # Composer
+    composer:
+        image: composer:latest
+        container_name: composer
+        working_dir: /var/www/html
+        entrypoint: ["composer"]
+        volumes:
+            - ./src:/var/www/html
+
+    # Artisan
+    artisan:
+        image: markmarilag27/php8
+        container_name: artisan
+        working_dir: /var/www/html
+        entrypoint: ["php", "/var/www/html/artisan"]
+        volumes:
+            - ./src:/var/www/html
+
+    # Node package manager
+    npm:
+        image: node:lts-alpine
+        container_name: npm
+        working_dir: /var/www/html
+        entrypoint: ["npm"]
+        volumes:
+            - ./src:/var/www/html
+
+    # Mail testing
+    mailhog:
+        image: mailhog/mailhog
+        container_name: mailhog
+        ports:
+            - "1025:1025"
+            - "8025:8025"
+
+# Volumes
+volumes:
+  mysql-data:
