@@ -10,6 +10,7 @@ Project structure:
     |── php
         |── crontab
         |── Dockerfile
+    |── Dockerfile.composer
 |── src (Laravel framework)
 |── .editorconfig
 |── .env
@@ -59,10 +60,11 @@ services:
 
     # Composer
     composer:
-        image: composer:latest
+        build:
+            context: ./dockerfiles
+            dockerfile: Dockerfile.composer
+        image: markmarilag27/composer
         container_name: composer
-        working_dir: /var/www/html
-        entrypoint: ["composer"]
         volumes:
             - ./src:/var/www/html
 
@@ -95,42 +97,6 @@ services:
 # Volumes
 volumes:
   mysql-data:
-```
-### Run composer with docker-compose and installing laravel framework
-We will install laravel using [Composer](https://laravel.com/docs/8.x#installation-via-composer)
-```
-$ sudo docker-compose run composer create-project laravel/laravel .
-Creating laravel-docker-example_composer_run ... done
-Creating a "laravel/laravel" project at "./"
-Installing laravel/laravel (v8.5.16)
-  - Downloading laravel/laravel (v8.5.16)
-  - Installing laravel/laravel (v8.5.16): Extracting archive
-Created project in /var/www/html/.
-> @php -r "file_exists('.env') || copy('.env.example', '.env');"
-Loading composer repositories with package information
-Updating dependencies
-Lock file operations: 104 installs, 0 updates, 0 removals
-  - Locking asm89/stack-cors (v2.0.3)
-...
-...
-...
-78 package suggestions were added by new dependencies, use `composer suggest` to see details.
-Generating optimized autoload files
-> Illuminate\Foundation\ComposerScripts::postAutoloadDump
-> @php artisan package:discover --ansi
-Discovered Package: facade/ignition
-Discovered Package: fideloper/proxy
-Discovered Package: fruitcake/laravel-cors
-Discovered Package: laravel/sail
-Discovered Package: laravel/tinker
-Discovered Package: nesbot/carbon
-Discovered Package: nunomaduro/collision
-Package manifest generated successfully.
-74 packages you are using are looking for funding.
-Use the `composer fund` command to find out more!
-> @php artisan key:generate --ansi
-Application key set successfully.
-
 ```
 
 ## Build images and with docker-compose
@@ -172,6 +138,43 @@ Step 2/13 : WORKDIR /var/www/html
 ...
 
 ```
+### Run composer with docker-compose and installing laravel framework
+We will install laravel using [Composer](https://laravel.com/docs/8.x#installation-via-composer)
+```
+$ sudo docker-compose run composer create-project laravel/laravel .
+Creating laravel-docker-example_composer_run ... done
+Creating a "laravel/laravel" project at "./"
+Installing laravel/laravel (v8.5.16)
+  - Downloading laravel/laravel (v8.5.16)
+  - Installing laravel/laravel (v8.5.16): Extracting archive
+Created project in /var/www/html/.
+> @php -r "file_exists('.env') || copy('.env.example', '.env');"
+Loading composer repositories with package information
+Updating dependencies
+Lock file operations: 104 installs, 0 updates, 0 removals
+  - Locking asm89/stack-cors (v2.0.3)
+...
+...
+...
+78 package suggestions were added by new dependencies, use `composer suggest` to see details.
+Generating optimized autoload files
+> Illuminate\Foundation\ComposerScripts::postAutoloadDump
+> @php artisan package:discover --ansi
+Discovered Package: facade/ignition
+Discovered Package: fideloper/proxy
+Discovered Package: fruitcake/laravel-cors
+Discovered Package: laravel/sail
+Discovered Package: laravel/tinker
+Discovered Package: nesbot/carbon
+Discovered Package: nunomaduro/collision
+Package manifest generated successfully.
+74 packages you are using are looking for funding.
+Use the `composer fund` command to find out more!
+> @php artisan key:generate --ansi
+Application key set successfully.
+
+```
+Run `sudo chown -R $USER:$USER src` to give permission to the created src directory
 
 ### Run with docker-compose
 Running the containers

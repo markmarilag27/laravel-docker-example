@@ -38,10 +38,11 @@ services:
 
     # Composer
     composer:
-        image: composer:latest
+        build:
+            context: ./dockerfiles
+            dockerfile: Dockerfile.composer
+        image: markmarilag27/composer
         container_name: composer
-        working_dir: /var/www/html
-        entrypoint: ["composer"]
         volumes:
             - ./src:/var/www/html
 

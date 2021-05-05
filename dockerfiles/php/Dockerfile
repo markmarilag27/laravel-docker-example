@@ -68,10 +68,6 @@ RUN docker-php-ext-enable \
     apcu \
     imagick
 
-# Clean up
-RUN rm -rf /var/cache/apk/* \
-    && rm -rf /tmp/*
-
 # Add crontab file in the cron directory
 COPY crontab /etc/cron.d/cron
 
@@ -80,7 +76,11 @@ RUN chmod 0644 /etc/cron.d/cron
 # Add UID '1000' to www-data
 RUN usermod -u 1000 www-data && groupmod -g 1000 www-data
 
-RUN chown -R www-data:www-data /var/www/html
+# Clean up
+RUN rm -rf /var/cache/apk/* \
+    && rm -rf /tmp/*
+
+RUN chown -R www-data:www-data .
 
 # Change current user to www
 USER www-data
