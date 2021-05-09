@@ -219,13 +219,11 @@ Removing npm      ... done
 Removing php      ... done
 Removing network laravel-docker-example_default
 ```
-### Using other containers with docker-compose
-Install node packages
-`
-sudo docker-compose run npm install
-`
-Run migration files [Artisan](https://laravel.com/docs/8.x/artisan)
-`
-sudo docker-compose run artisan migrate
-`
-You can also access [Mailhog](https://github.com/mailhog/MailHog) with your browser http://localhost:8025
+### Install node packages with docker-compose
+`sudo docker-compose run npm install`
+
+### Run migration files [Artisan](https://laravel.com/docs/8.x/artisan) with docker-compose
+`sudo docker-compose run artisan migrate`
+
+### Use [Mailhog](https://github.com/mailhog/MailHog) for local email testing
+Open your browser http://localhost:8025
